@@ -1,0 +1,175 @@
+{
+  "filmes": [
+    {
+      "id": "2",
+      "titulo": "Matrix",
+      "sinopse": "Um hacker descobre que a realidade é uma simulação criada por máquinas e se junta a rebeldes para lutar contra elas. A sinopse é longa o suficiente para passar na validação.",
+      "classificacao": "14 Anos",
+      "duracao": 136,
+      "genero": "FICCAO",
+      "elenco": "Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss",
+      "dataInicioExibicao": "2025-12-01",
+      "dataFinalExibicao": "2026-02-15"
+    },
+    {
+      "id": "3",
+      "titulo": "Sobrenatural: A Porta Vermelha",
+      "sinopse": "O filho mais velho da família Lambert deve enfrentar seus demônios interiores para tentar fechar de uma vez por todas o portal entre o mundo real e o Além. Este texto tem mais de 10 caracteres.",
+      "classificacao": "16 Anos",
+      "duracao": 107,
+      "genero": "TERROR",
+      "elenco": "Patrick Wilson, Ty Simpkins, Rose Byrne",
+      "dataInicioExibicao": "2026-01-05",
+      "dataFinalExibicao": "2026-03-05"
+    },
+    {
+      "id": "8fef",
+      "titulo": "Teste 123",
+      "sinopse": "aaaad awd awd aw",
+      "classificacao": "12",
+      "duracao": 123,
+      "genero": "Fantasia",
+      "elenco": "",
+      "dataInicioExibicao": "2025-12-04",
+      "dataFinalExibicao": "2025-12-22"
+    }
+  ],
+  "salas": [
+    {
+      "id": "101",
+      "numero": 1,
+      "capacidade": 120,
+      "poltronas": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": "102",
+      "numero": 2,
+      "capacidade": 80,
+      "poltronas": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  ],
+  "sessoes": [
+    {
+      "id": "10001",
+      "horarioExibicao": "2026-01-10T19:30:00Z",
+      "filmeId": 1,
+      "salaId": 101
+    },
+    {
+      "id": "10002",
+      "horarioExibicao": "2026-01-10T22:00:00Z",
+      "filmeId": 2,
+      "salaId": 102
+    },
+    {
+      "id": "10003",
+      "horarioExibicao": "2026-01-11T16:00:00Z",
+      "filmeId": 3,
+      "salaId": 101
+    }
+  ],
+  "ingressos": [
+    {
+      "id": "2001",
+      "sessaoId": 10001,
+      "tipo": "Inteira",
+      "valorInteira": 30,
+      "valorMeia": 15
+    },
+    {
+      "id": "2002",
+      "sessaoId": 10001,
+      "tipo": "Meia",
+      "valorInteira": 30,
+      "valorMeia": 15
+    },
+    {
+      "id": "2003",
+      "sessaoId": 10002,
+      "tipo": "Inteira",
+      "valorInteira": 35,
+      "valorMeia": 17.5
+    }
+  ],
+  "pedidos": [
+    {
+      "id": "3001",
+      "qtdInteira": 1,
+      "qtdMeia": 1,
+      "ingressoIds": [
+        2001,
+        2002
+      ],
+      "lancheIds": [
+        501
+      ],
+      "valorTotal": 80
+    },
+    {
+      "id": "3002",
+      "qtdInteira": 1,
+      "qtdMeia": 0,
+      "ingressoIds": [
+        2003
+      ],
+      "lancheIds": [],
+      "valorTotal": 35
+    }
+  ],
+  "lanchecombos": [
+    {
+      "id": "1",
+      "nome": "Combo Mega Pop",
+      "descricao": "Pipoca Grande + 2 Refrigerantes Grandes",
+      "valorUnitario": 45,
+      "qtUnidade": 1,
+      "subtotal": 45
+    },
+    {
+      "id": "2",
+      "nome": "Combo Família",
+      "descricao": "2 Pipocas Médias + 4 Refrigerantes Médios + Chocolate",
+      "valorUnitario": 75.5,
+      "qtUnidade": 1,
+      "subtotal": 75.5
+    }
+  ]
+}
