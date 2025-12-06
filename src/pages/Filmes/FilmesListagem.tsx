@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import type {IFilme} from '../../models/Filme';
 import {api} from '../../api';
-import {Outlet} from 'react-router-dom';
 import {Alert, Button, Container, Spinner, Table} from 'react-bootstrap';
 import {Film, PencilSquare, TrashFill} from 'react-bootstrap-icons';
 import {FilmesCadastro} from './FilmesCadastro.tsx';
@@ -44,23 +43,29 @@ export const FilmesListagem: React.FC = () => {
 
 	if (loading) {
 		return (
-			<Container className="mt-5 text-center">
-				<Spinner animation="border" role="status" />
-				<p>Carregando filmes...</p>
+			<Container className="mt-4">
+				<FilmesCadastro loadLista={fetchFilmes} />
+				<Container className="mt-5 text-center">
+					<Spinner animation="border" role="status" />
+					<p>Carregando filmes...</p>
+				</Container>
 			</Container>
 		);
 	}
 	if (error) {
 		return (
 			<Container className="mt-4">
-				<Alert variant="danger">{error}</Alert>
+				<FilmesCadastro loadLista={fetchFilmes} />
+				<Container className="mt-4">
+					<Alert variant="danger">{error}</Alert>
+				</Container>
 			</Container>
 		);
 	}
 
 	return (
 		<Container className="mt-4">
-			<FilmesCadastro />
+			<FilmesCadastro loadLista={fetchFilmes} />
 			<h2 className="my-4">
 				<Film /> Filmes
 			</h2>
@@ -89,7 +94,8 @@ export const FilmesListagem: React.FC = () => {
 								<td>{filme.duracao}</td>
 								<td>{filme.classificacao}</td>
 								<td>
-									{filme.dataInicioExibicao} a {filme.dataFinalExibicao}
+									{new Date(filme.dataInicioExibicao).toLocaleDateString('pt-BR')} à{' '}
+									{new Date(filme.dataFinalExibicao).toLocaleDateString('pt-BR')}
 								</td>
 								<td>
 									<Button
@@ -110,7 +116,6 @@ export const FilmesListagem: React.FC = () => {
 					</tbody>
 				</Table>
 			)}
-			<Outlet />
 		</Container>
 	);
 };

@@ -6,9 +6,8 @@ export const Navbar: FC = () => {
 	return (
 		<NavbarUI bg="dark" variant="dark" expand="lg" className="mb-4">
 			<Container>
-				<NavbarUI.Brand as={NavLink} to="/">
-					<i className="bi bi-film me-2"></i>
-					CineWeb Admin
+				<NavbarUI.Brand as={NavLink} to="/" className="navbar-brand fw-bold">
+					🎬 CineWeb
 				</NavbarUI.Brand>
 				<NavbarUI.Toggle aria-controls="basic-navbar-nav" />
 				<NavbarUI.Collapse id="basic-navbar-nav">

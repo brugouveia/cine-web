@@ -27,7 +27,7 @@ export const FilmeSchema = z.object({
 	sinopse: z.string().min(10, 'A Sinopse deve ter no mínimo 10 caracteres.'),
 	classificacao: z.string().min(1, 'A Classificação é obrigatória.'),
 	duracao: z.int('Duração deve ser um número inteiro.').positive('A Duração deve ser um número positivo.'),
-	genero: z.enum(GeneroFilme),
+	genero: z.enum(GeneroFilme, {message: 'Selecione o Gênero'}),
 	elenco: z.string().optional(),
 	dataInicioExibicao: z.string().min(1, 'Data de Início da Exibição é obrigatória.'),
 	dataFinalExibicao: z.string().min(1, 'Data Final da Exibição é obrigatória.'),

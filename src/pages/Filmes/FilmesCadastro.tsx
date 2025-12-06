@@ -1,18 +1,15 @@
-import React from 'react';
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {FilmeSchema, GeneroFilme, type IFilmeForm} from '../../models/Filme';
 import {api} from '../../api';
-import {useNavigate} from 'react-router-dom';
 import {Button, Col, Form, Row} from 'react-bootstrap';
-import {PlusSquare} from 'react-bootstrap-icons';
 
-export const FilmesCadastro: React.FC = () => {
-	const navigate = useNavigate();
+export function FilmesCadastro({loadLista}: {loadLista: () => void}) {
 	const {
 		register,
 		handleSubmit,
 		formState: {errors},
+		reset,
 	} = useForm<IFilmeForm>({
 		resolver: zodResolver(FilmeSchema.omit({id: true})),
 	});
@@ -21,7 +18,8 @@ export const FilmesCadastro: React.FC = () => {
 		try {
 			await api.post('/filmes', data);
 			alert('Filme cadastrado com sucesso!');
-			navigate('/filmes');
+			loadLista();
+			reset();
 		} catch (error) {
 			console.error('Erro ao cadastrar filme:', error);
 			alert('Erro ao cadastrar filme. Verifique o console.');
@@ -30,10 +28,7 @@ export const FilmesCadastro: React.FC = () => {
 
 	return (
 		<>
-			<h2 className="mb-4">
-				<PlusSquare /> Cadastrar Novo Filme
-			</h2>
-
+			<h2 className="mb-4">Cadastro de Filmes</h2>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Row className="mb-3">
 					<Form.Group as={Col} md="6" controlId="titulo">
@@ -127,11 +122,12 @@ export const FilmesCadastro: React.FC = () => {
 				<Row>
 					<Col className="text-end">
 						<Button variant="success" type="submit">
-							Novo Filme
+							Salvar
 						</Button>
 					</Col>
 				</Row>
+				<hr />
 			</Form>
 		</>
 	);
-};
+}
