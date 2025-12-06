@@ -6,6 +6,7 @@ import {api} from '../../api';
 import {Alert, Button, Container, Spinner, Table} from 'react-bootstrap';
 import {CalendarEvent, TrashFill, PencilSquare, TicketPerforated} from 'react-bootstrap-icons';
 import {SessoesCadastro} from './SessoesCadastro';
+import {Link} from 'react-router-dom';
 
 export function SessoesListagem() {
 	const [sessoes, setSessoes] = useState<ISessao[]>([]);
@@ -106,9 +107,11 @@ export function SessoesListagem() {
 							<td>Sala {sessao.sala?.numero || 'não encontrada'}</td>
 							<td>{formatarHorario(sessao.horarioExibicao)}</td>
 							<td>
-								<Button variant="info" size="sm" className="me-2" title="Vender Ingresso">
-									<TicketPerforated size={17} />
-								</Button>
+								<Link to={`/ingressos/venda/${sessao.id}`}>
+									<Button variant="info" size="sm" className="me-2" title="Vender Ingresso">
+										<TicketPerforated size={17} />
+									</Button>
+								</Link>
 
 								<Button
 									variant="danger"
