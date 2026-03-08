@@ -7,14 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+*node_modules
 dist
 dist-ssr
 *.local
+*.env
 
 # Prisma SQLite
 backend/prisma/*.db
 backend/prisma/*.db-journal
+backend/generated/prisma
 
 # Editor directories and files
 .vscode/*
