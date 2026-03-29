@@ -34,7 +34,7 @@ export function IngressoListagem({sessaoId, loadKey}: {sessaoId: string; loadKey
 				fetchIngressos();
 			} catch (err) {
 				console.error('Erro ao estornar ingresso:', err);
-				alert('Erro ao estornar ingresso. Verifique o console.');
+				alert('Erro ao estornar ingresso.');
 			}
 		}
 	};

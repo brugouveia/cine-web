@@ -1,10 +1,30 @@
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {FilmeSchema, GeneroFilme, type IFilmeForm} from '../../models/Filme';
+import {FilmeSchema, GeneroFilme, type IFilme, type IFilmeForm} from '../../models/Filme';
 import {api} from '../../api';
 import {Button, Col, Form, Row} from 'react-bootstrap';
+import {useEffect} from 'react';
 
-export function FilmesCadastro({loadLista}: {loadLista: () => void}) {
+interface FilmesCadastroProps {
+	loadLista: () => void;
+	filmeEditando?: IFilme | null;
+	onCancelEdit?: () => void;
+}
+
+const defaultValues: Partial<IFilmeForm> = {
+	titulo: '',
+	sinopse: '',
+	genero: undefined,
+	duracao: 0,
+	classificacao: '',
+	elenco: '',
+	dataInicioExibicao: '',
+	dataFinalExibicao: '',
+};
+
+export function FilmesCadastro({loadLista, filmeEditando, onCancelEdit}: FilmesCadastroProps) {
+	const isEditando = !!filmeEditando;
+
 	const {
 		register,
 		handleSubmit,
@@ -12,23 +32,40 @@ export function FilmesCadastro({loadLista}: {loadLista: () => void}) {
 		reset,
 	} = useForm<IFilmeForm>({
 		resolver: zodResolver(FilmeSchema.omit({id: true})),
+		defaultValues,
 	});
+
+	useEffect(() => {
+		if (filmeEditando) {
+			reset(filmeEditando);
+		}
+	}, [filmeEditando, reset]);
+
+	const clearForm = () => {
+		reset(defaultValues);
+	};
 
 	const onSubmit = async (data: IFilmeForm) => {
 		try {
-			await api.post('/filmes', data);
-			alert('Filme cadastrado com sucesso!');
+			if (isEditando) {
+				await api.patch(`/filmes/${filmeEditando!.id}`, data);
+				alert('Filme atualizado com sucesso!');
+				onCancelEdit?.();
+			} else {
+				await api.post('/filmes', data);
+				alert('Filme cadastrado com sucesso!');
+			}
 			loadLista();
-			reset();
+			clearForm();
 		} catch (error) {
-			console.error('Erro ao cadastrar filme:', error);
-			alert('Erro ao cadastrar filme. Verifique o console.');
+			console.error(isEditando ? 'Erro ao atualizar filme:' : 'Erro ao cadastrar filme:', error);
+			alert(isEditando ? 'Erro ao atualizar filme.' : 'Erro ao cadastrar filme.');
 		}
 	};
 
 	return (
 		<>
-			<h2 className="mb-4">Cadastro de Filmes</h2>
+			<h2 className="mb-4">{isEditando ? 'Editar Filme' : 'Cadastro de Filmes'}</h2>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Row className="mb-3">
 					<Form.Group as={Col} md="6" controlId="titulo">
@@ -121,8 +158,20 @@ export function FilmesCadastro({loadLista}: {loadLista: () => void}) {
 
 				<Row>
 					<Col className="text-end">
+						{isEditando && (
+							<Button
+								variant="secondary"
+								className="me-2"
+								onClick={() => {
+									clearForm();
+									onCancelEdit?.();
+								}}
+							>
+								Cancelar
+							</Button>
+						)}
 						<Button variant="success" type="submit">
-							Salvar
+							{isEditando ? 'Atualizar' : 'Salvar'}
 						</Button>
 					</Col>
 				</Row>

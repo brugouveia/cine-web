@@ -14,7 +14,7 @@ export interface ISala {
 }
 
 export const SalaSchema = z.object({
-	id: z.number().optional(),
+	id: z.int().optional(),
 	numero: z.int('O Número da Sala deve ser inteiro.').positive('O Número da Sala deve ser positivo.'),
 	capacidade: z
 		.int('A Capacidade deve ser um número inteiro.')

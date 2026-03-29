@@ -1,15 +1,24 @@
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {type ISessaoForm, SessaoSchema} from '../../models/Sessao';
+import {type ISessao, type ISessaoForm, SessaoSchema} from '../../models/Sessao';
 import {type IFilme} from '../../models/Filme';
 import {type ISala} from '../../models/Sala';
 import {api} from '../../api';
 import {Button, Col, Form, Row} from 'react-bootstrap';
 import {useEffect, useState} from 'react';
 
-export function SessoesCadastro({loadLista}: {loadLista: () => void}) {
+interface SessoesCadastroProps {
+	loadLista: () => void;
+	sessaoEditando?: ISessao | null;
+	onCancelEdit?: () => void;
+}
+
+const defaultValues: Partial<ISessaoForm> = {filmeId: '', salaId: '', horarioExibicao: ''};
+
+export function SessoesCadastro({loadLista, sessaoEditando, onCancelEdit}: SessoesCadastroProps) {
 	const [filmes, setFilmes] = useState<IFilme[]>([]);
 	const [salas, setSalas] = useState<ISala[]>([]);
+	const isEditando = !!sessaoEditando;
 
 	const {
 		register,
@@ -18,6 +27,7 @@ export function SessoesCadastro({loadLista}: {loadLista: () => void}) {
 		reset,
 	} = useForm<ISessaoForm>({
 		resolver: zodResolver(SessaoSchema.omit({id: true})),
+		defaultValues,
 	});
 
 	useEffect(() => {
@@ -31,24 +41,62 @@ export function SessoesCadastro({loadLista}: {loadLista: () => void}) {
 				alert('Erro ao carregar filmes e salas.');
 			}
 		};
-		fetchDependencies();
+		void fetchDependencies();
 	}, []);
+
+	function formatToDatetimeLocal(dateString: string) {
+		const date = new Date(dateString);
+
+		const pad = (n: number) => String(n).padStart(2, '0');
+
+		return (
+			date.getFullYear() +
+			'-' +
+			pad(date.getMonth() + 1) +
+			'-' +
+			pad(date.getDate()) +
+			'T' +
+			pad(date.getHours()) +
+			':' +
+			pad(date.getMinutes())
+		);
+	}
+
+	useEffect(() => {
+		if (sessaoEditando) {
+			reset({
+				filmeId: String(sessaoEditando.filmeId),
+				salaId: String(sessaoEditando.salaId),
+				horarioExibicao: formatToDatetimeLocal(sessaoEditando.horarioExibicao),
+			});
+		}
+	}, [sessaoEditando, reset]);
+
+	const clearForm = () => {
+		reset(defaultValues);
+	};
 
 	const onSubmit = async (data: ISessaoForm) => {
 		try {
-			await api.post('/sessoes', data);
-			alert('Sessão cadastrada com sucesso!');
+			if (isEditando) {
+				await api.patch(`/sessoes/${sessaoEditando!.id}`, data);
+				alert('Sessão atualizada com sucesso!');
+				onCancelEdit?.();
+			} else {
+				await api.post('/sessoes', data);
+				alert('Sessão cadastrada com sucesso!');
+			}
 			loadLista();
-			reset();
+			clearForm();
 		} catch (error) {
-			console.error('Erro ao cadastrar sessão:', error);
-			alert('Erro ao cadastrar sessão. Verifique o console.');
+			console.error(isEditando ? 'Erro ao atualizar sessão:' : 'Erro ao cadastrar sessão:', error);
+			alert(isEditando ? 'Erro ao atualizar sessão.' : 'Erro ao cadastrar sessão.');
 		}
 	};
 
 	return (
 		<>
-			<h2 className="mb-4">Cadastro de Sessões</h2>
+			<h2 className="mb-4">{isEditando ? 'Editar Sessão' : 'Cadastro de Sessões'}</h2>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Row className="mb-3">
 					<Form.Group as={Col} md="4" controlId="filmeId">
@@ -96,8 +144,20 @@ export function SessoesCadastro({loadLista}: {loadLista: () => void}) {
 
 				<Row>
 					<Col className="text-end">
+						{isEditando && (
+							<Button
+								variant="secondary"
+								className="me-2"
+								onClick={() => {
+									clearForm();
+									onCancelEdit?.();
+								}}
+							>
+								Cancelar
+							</Button>
+						)}
 						<Button variant="success" type="submit">
-							Salvar
+							{isEditando ? 'Atualizar' : 'Salvar'}
 						</Button>
 					</Col>
 				</Row>

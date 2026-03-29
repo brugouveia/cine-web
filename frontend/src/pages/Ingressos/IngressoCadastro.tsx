@@ -68,7 +68,7 @@ export function IngressoCadastro({sessaoId, loadLista}: {sessaoId: string; loadL
 			reset({sessaoId, valorUnitario: 0, tipo: undefined});
 		} catch (error) {
 			console.error('Erro ao vender ingresso:', error);
-			alert('Erro ao vender ingresso. Verifique o console.');
+			alert('Erro ao vender ingresso.');
 		}
 	};
 

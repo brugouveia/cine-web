@@ -12,6 +12,7 @@ export function SessoesListagem() {
 	const [sessoes, setSessoes] = useState<ISessao[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [editando, setEditando] = useState<ISessao | null>(null);
 
 	const fetchSessoes = useCallback(async () => {
 		try {
@@ -53,7 +54,7 @@ export function SessoesListagem() {
 				fetchSessoes();
 			} catch (err) {
 				console.error('Erro ao excluir sessão:', err);
-				alert('Erro ao excluir sessão. Verifique o console.');
+				alert('Erro ao excluir sessão.');
 			}
 		}
 	};
@@ -122,7 +123,12 @@ export function SessoesListagem() {
 								>
 									<TrashFill />
 								</Button>
-								<Button variant="warning" size="sm" title="Editar Sessão">
+								<Button
+									variant="warning"
+									size="sm"
+									title="Editar Sessão"
+									onClick={() => setEditando(sessao)}
+								>
 									<PencilSquare />
 								</Button>
 							</td>
@@ -135,7 +141,11 @@ export function SessoesListagem() {
 
 	return (
 		<Container className="mt-4">
-			<SessoesCadastro loadLista={fetchSessoes} />
+			<SessoesCadastro
+				loadLista={fetchSessoes}
+				sessaoEditando={editando}
+				onCancelEdit={() => setEditando(null)}
+			/>
 			<h2 className="my-4">
 				<CalendarEvent className="me-2" /> Sessões Agendadas
 			</h2>

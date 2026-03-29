@@ -9,6 +9,7 @@ export function SalasListagem() {
 	const [salas, setSalas] = useState<ISala[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [editando, setEditando] = useState<ISala | null>(null);
 
 	const fetchSalas = useCallback(async () => {
 		try {
@@ -36,7 +37,7 @@ export function SalasListagem() {
 				fetchSalas();
 			} catch (err) {
 				console.error('Erro ao excluir sala:', err);
-				alert('Erro ao excluir sala. Verifique o console.');
+				alert('Erro ao excluir sala.');
 			}
 		}
 	};
@@ -44,7 +45,7 @@ export function SalasListagem() {
 	if (loading) {
 		return (
 			<Container className="mt-4">
-				<SalasCadastro loadLista={fetchSalas} />
+				<SalasCadastro loadLista={fetchSalas} onCancelEdit={() => setEditando(null)} />
 				<Container className="mt-5 text-center">
 					<Spinner animation="border" role="status" />
 					<p>Carregando salas...</p>
@@ -55,7 +56,7 @@ export function SalasListagem() {
 	if (error) {
 		return (
 			<Container className="mt-4">
-				<SalasCadastro loadLista={fetchSalas} />
+				<SalasCadastro loadLista={fetchSalas} onCancelEdit={() => setEditando(null)} />
 				<Container className="mt-4">
 					<Alert variant="danger">{error}</Alert>
 				</Container>
@@ -65,7 +66,7 @@ export function SalasListagem() {
 
 	return (
 		<Container className="mt-4">
-			<SalasCadastro loadLista={fetchSalas} />
+			<SalasCadastro loadLista={fetchSalas} salaEditando={editando} onCancelEdit={() => setEditando(null)} />
 			<h2 className="my-4">
 				<Tv className="me-2" /> Salas
 			</h2>
@@ -100,7 +101,12 @@ export function SalasListagem() {
 									>
 										<TrashFill />
 									</Button>
-									<Button variant="warning" size="sm" title="Editar Sala">
+									<Button
+										variant="warning"
+										size="sm"
+										title="Editar Sala"
+										onClick={() => setEditando(sala)}
+									>
 										<PencilSquare />
 									</Button>
 								</td>

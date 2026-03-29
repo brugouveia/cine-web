@@ -9,6 +9,7 @@ export const FilmesListagem: React.FC = () => {
 	const [filmes, setFilmes] = useState<IFilme[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [editando, setEditando] = useState<IFilme | null>(null);
 
 	const fetchFilmes = useCallback(async () => {
 		try {
@@ -36,7 +37,7 @@ export const FilmesListagem: React.FC = () => {
 				fetchFilmes();
 			} catch (err) {
 				console.error('Erro ao excluir filme:', err);
-				alert('Erro ao excluir filme. Verifique o console.');
+				alert('Erro ao excluir filme.');
 			}
 		}
 	};
@@ -44,7 +45,7 @@ export const FilmesListagem: React.FC = () => {
 	if (loading) {
 		return (
 			<Container className="mt-4">
-				<FilmesCadastro loadLista={fetchFilmes} />
+				<FilmesCadastro loadLista={fetchFilmes} onCancelEdit={() => setEditando(null)} />
 				<Container className="mt-5 text-center">
 					<Spinner animation="border" role="status" />
 					<p>Carregando filmes...</p>
@@ -55,7 +56,7 @@ export const FilmesListagem: React.FC = () => {
 	if (error) {
 		return (
 			<Container className="mt-4">
-				<FilmesCadastro loadLista={fetchFilmes} />
+				<FilmesCadastro loadLista={fetchFilmes} onCancelEdit={() => setEditando(null)} />
 				<Container className="mt-4">
 					<Alert variant="danger">{error}</Alert>
 				</Container>
@@ -65,7 +66,7 @@ export const FilmesListagem: React.FC = () => {
 
 	return (
 		<Container className="mt-4">
-			<FilmesCadastro loadLista={fetchFilmes} />
+			<FilmesCadastro loadLista={fetchFilmes} filmeEditando={editando} onCancelEdit={() => setEditando(null)} />
 			<h2 className="my-4">
 				<Film /> Filmes
 			</h2>
@@ -107,7 +108,12 @@ export const FilmesListagem: React.FC = () => {
 									>
 										<TrashFill />
 									</Button>
-									<Button variant="warning" size="sm" title="Editar Filme">
+									<Button
+										variant="warning"
+										size="sm"
+										title="Editar Filme"
+										onClick={() => setEditando(filme)}
+									>
 										<PencilSquare />
 									</Button>
 								</td>

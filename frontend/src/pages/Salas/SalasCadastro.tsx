@@ -1,10 +1,25 @@
 import {useForm} from 'react-hook-form';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {type ISalaForm, SalaSchema, TipoSala} from '../../models/Sala';
+import {type ISala, type ISalaForm, SalaSchema, TipoSala} from '../../models/Sala';
 import {api} from '../../api';
 import {Button, Col, Form, Row} from 'react-bootstrap';
+import {useEffect} from 'react';
 
-export function SalasCadastro({loadLista}: {loadLista: () => void}) {
+interface SalasCadastroProps {
+	loadLista: () => void;
+	salaEditando?: ISala | null;
+	onCancelEdit?: () => void;
+}
+
+const defaultValues: Partial<ISalaForm> = {
+	numero: 0,
+	capacidade: 0,
+	tipo: undefined,
+};
+
+export function SalasCadastro({loadLista, salaEditando, onCancelEdit}: SalasCadastroProps) {
+	const isEditando = !!salaEditando;
+
 	const {
 		register,
 		handleSubmit,
@@ -12,23 +27,40 @@ export function SalasCadastro({loadLista}: {loadLista: () => void}) {
 		reset,
 	} = useForm<ISalaForm>({
 		resolver: zodResolver(SalaSchema.omit({id: true})),
+		defaultValues,
 	});
+
+	useEffect(() => {
+		if (salaEditando) {
+			reset(salaEditando);
+		}
+	}, [salaEditando, reset]);
+
+	const clearForm = () => {
+		reset(defaultValues);
+	};
 
 	const onSubmit = async (data: ISalaForm) => {
 		try {
-			await api.post('/salas', data);
-			alert('Sala cadastrada com sucesso!');
+			if (isEditando) {
+				await api.patch(`/salas/${salaEditando!.id}`, data);
+				alert('Sala atualizada com sucesso!');
+				onCancelEdit?.();
+			} else {
+				await api.post('/salas', data);
+				alert('Sala cadastrada com sucesso!');
+			}
 			loadLista();
-			reset();
+			clearForm();
 		} catch (error) {
-			console.error('Erro ao cadastrar sala:', error);
-			alert('Erro ao cadastrar sala. Verifique o console.');
+			console.error(isEditando ? 'Erro ao atualizar sala:' : 'Erro ao cadastrar sala:', error);
+			alert(isEditando ? 'Erro ao atualizar sala.' : 'Erro ao cadastrar sala.');
 		}
 	};
 
 	return (
 		<>
-			<h2 className="mb-4">Cadastro de Salas</h2>
+			<h2 className="mb-4">{isEditando ? 'Editar Sala' : 'Cadastro de Salas'}</h2>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				<Row className="mb-3">
 					<Form.Group as={Col} md="4" controlId="numero">
@@ -73,8 +105,20 @@ export function SalasCadastro({loadLista}: {loadLista: () => void}) {
 
 				<Row>
 					<Col className="text-end">
+						{isEditando && (
+							<Button
+								variant="secondary"
+								className="me-2"
+								onClick={() => {
+									clearForm();
+									onCancelEdit?.();
+								}}
+							>
+								Cancelar
+							</Button>
+						)}
 						<Button variant="success" type="submit">
-							Salvar
+							{isEditando ? 'Atualizar' : 'Salvar'}
 						</Button>
 					</Col>
 				</Row>

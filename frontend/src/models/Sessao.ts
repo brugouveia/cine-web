@@ -19,7 +19,7 @@ const dateFutureCheck = z.string().refine((val) => {
 }, 'A data e hora da sessão não pode ser retroativa (deve ser futura).');
 
 export const SessaoSchema = z.object({
-	id: z.number().optional(),
+	id: z.int().optional(),
 	filmeId: z.string().min(1, 'O Filme é obrigatório.'),
 	salaId: z.string().min(1, 'A Sala é obrigatória.'),
 	horarioExibicao: z.string().min(1, 'A Data e Hora da Sessão são obrigatórias.').pipe(dateFutureCheck),
