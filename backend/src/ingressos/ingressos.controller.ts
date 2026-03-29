@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Delete, Param, Body, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe } from '@nestjs/common';
 import { IngressosService } from './ingressos.service';
+import { CreateIngressoDto } from './dto/create-ingresso.dto';
+import { UpdateIngressoDto } from './dto/update-ingresso.dto';
 
 @Controller('ingressos')
 export class IngressosController {
     constructor(private readonly ingressosService: IngressosService) {}
+
+    @Post()
+    create(@Body() createIngressoDto: CreateIngressoDto) {
+        return this.ingressosService.create(createIngressoDto);
+    }
 
     @Get()
     findAll(@Query('sessaoId') sessaoId?: string) {
@@ -15,9 +22,9 @@ export class IngressosController {
         return this.ingressosService.findOne(id);
     }
 
-    @Post()
-    create(@Body() body: any) {
-        return this.ingressosService.create(body);
+    @Patch(':id')
+    update(@Param('id', ParseIntPipe) id: number, @Body() updateIngressoDto: UpdateIngressoDto) {
+        return this.ingressosService.update(id, updateIngressoDto);
     }
 
     @Delete(':id')

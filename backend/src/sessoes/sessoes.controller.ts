@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { SessoesService } from './sessoes.service';
+import { CreateSessaoDto } from './dto/create-sessao.dto';
+import { UpdateSessaoDto } from './dto/update-sessao.dto';
 
 @Controller('sessoes')
 export class SessoesController {
     constructor(private readonly sessoesService: SessoesService) {}
+
+    @Post()
+    create(@Body() createSessaoDto: CreateSessaoDto) {
+        return this.sessoesService.create(createSessaoDto);
+    }
 
     @Get()
     findAll() {
@@ -15,9 +22,9 @@ export class SessoesController {
         return this.sessoesService.findOne(id);
     }
 
-    @Post()
-    create(@Body() body: any) {
-        return this.sessoesService.create(body);
+    @Patch(':id')
+    update(@Param('id', ParseIntPipe) id: number, @Body() updateSessaoDto: UpdateSessaoDto) {
+        return this.sessoesService.update(id, updateSessaoDto);
     }
 
     @Delete(':id')

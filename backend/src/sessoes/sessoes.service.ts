@@ -1,9 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateSessaoDto } from './dto/create-sessao.dto';
+import { UpdateSessaoDto } from './dto/update-sessao.dto';
 
 @Injectable()
 export class SessoesService {
     constructor(private prisma: PrismaService) {}
+
+    create(createSessaoDto: CreateSessaoDto) {
+        return this.prisma.sessao.create({
+            data: {
+                horarioExibicao: createSessaoDto.horarioExibicao,
+                filmeId: Number(createSessaoDto.filmeId),
+                salaId: Number(createSessaoDto.salaId),
+            },
+            include: { filme: true, sala: true },
+        });
+    }
 
     findAll() {
         return this.prisma.sessao.findMany({
@@ -18,12 +31,13 @@ export class SessoesService {
         });
     }
 
-    create(data: { horarioExibicao: string; filmeId: number; salaId: number }) {
-        return this.prisma.sessao.create({
+    update(id: number, updateSessaoDto: UpdateSessaoDto) {
+        return this.prisma.sessao.update({
+            where: { id },
             data: {
-                horarioExibicao: data.horarioExibicao,
-                filme: { connect: { id: Number(data.filmeId) } },
-                sala: { connect: { id: Number(data.salaId) } },
+                horarioExibicao: updateSessaoDto.horarioExibicao,
+                filmeId: updateSessaoDto.filmeId && Number(updateSessaoDto.filmeId),
+                salaId: updateSessaoDto.salaId && Number(updateSessaoDto.salaId),
             },
             include: { filme: true, sala: true },
         });

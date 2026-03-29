@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Delete, Param, Body, ParseIntPipe, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { FilmesService } from './filmes.service';
+import { CreateFilmeDto } from './dto/create-filme.dto';
+import { UpdateFilmeDto } from './dto/update-filme.dto';
 
 @Controller('filmes')
 export class FilmesController {
     constructor(private readonly filmesService: FilmesService) {}
+
+    @Post()
+    create(@Body() createFilmeDto: CreateFilmeDto) {
+        return this.filmesService.create(createFilmeDto);
+    }
 
     @Get()
     findAll() {
@@ -15,14 +22,9 @@ export class FilmesController {
         return this.filmesService.findOne(id);
     }
 
-    @Post()
-    create(@Body() body: any) {
-        return this.filmesService.create(body);
-    }
-
-    @Put(':id')
-    update(@Param('id', ParseIntPipe) id: number, @Body() body: any) {
-        return this.filmesService.update(id, body);
+    @Patch(':id')
+    update(@Param('id', ParseIntPipe) id: number, @Body() updateFilmeDto: UpdateFilmeDto) {
+        return this.filmesService.update(id, updateFilmeDto);
     }
 
     @Delete(':id')
