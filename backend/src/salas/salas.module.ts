@@ -6,4 +6,4 @@ import { SalasService } from './salas.service';
     controllers: [SalasController],
     providers: [SalasService],
 })
-export class SalasModule { }
+export class SalasModule {}

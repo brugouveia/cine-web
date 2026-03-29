@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class IngressosService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     findAll(sessaoId?: string) {
         const where = sessaoId ? { sessaoId: Number(sessaoId) } : {};
@@ -14,12 +14,7 @@ export class IngressosService {
         return this.prisma.ingresso.findUnique({ where: { id } });
     }
 
-    create(data: {
-        sessaoId: string | number;
-        valorInteira: number;
-        valorMeia: number;
-        tipo?: string;
-    }) {
+    create(data: { sessaoId: string | number; valorInteira: number; valorMeia: number; tipo?: string }) {
         return this.prisma.ingresso.create({
             data: {
                 valorInteira: data.valorInteira,

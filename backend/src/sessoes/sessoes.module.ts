@@ -6,4 +6,4 @@ import { SessoesService } from './sessoes.service';
     controllers: [SessoesController],
     providers: [SessoesService],
 })
-export class SessoesModule { }
+export class SessoesModule {}

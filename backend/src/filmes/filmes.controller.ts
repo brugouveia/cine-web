@@ -1,18 +1,9 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Delete,
-    Param,
-    Body,
-    ParseIntPipe,
-    Put,
-} from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, ParseIntPipe, Put } from '@nestjs/common';
 import { FilmesService } from './filmes.service';
 
 @Controller('filmes')
 export class FilmesController {
-    constructor(private readonly filmesService: FilmesService) { }
+    constructor(private readonly filmesService: FilmesService) {}
 
     @Get()
     findAll() {

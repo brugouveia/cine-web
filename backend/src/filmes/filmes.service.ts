@@ -4,7 +4,7 @@ import { Prisma } from 'src/prisma/generated/client';
 
 @Injectable()
 export class FilmesService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService) {}
 
     findAll() {
         return this.prisma.filme.findMany();

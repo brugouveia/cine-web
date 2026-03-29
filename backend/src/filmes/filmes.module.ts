@@ -6,4 +6,4 @@ import { FilmesService } from './filmes.service';
     controllers: [FilmesController],
     providers: [FilmesService],
 })
-export class FilmesModule { }
+export class FilmesModule {}

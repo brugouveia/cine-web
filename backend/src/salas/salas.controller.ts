@@ -1,18 +1,9 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Delete,
-    Param,
-    Body,
-    ParseIntPipe,
-    Put,
-} from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, ParseIntPipe, Put } from '@nestjs/common';
 import { SalasService } from './salas.service';
 
 @Controller('salas')
 export class SalasController {
-    constructor(private readonly salasService: SalasService) { }
+    constructor(private readonly salasService: SalasService) {}
 
     @Get()
     findAll() {

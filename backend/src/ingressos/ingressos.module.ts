@@ -6,4 +6,4 @@ import { IngressosService } from './ingressos.service';
     controllers: [IngressosController],
     providers: [IngressosService],
 })
-export class IngressosModule { }
+export class IngressosModule {}
