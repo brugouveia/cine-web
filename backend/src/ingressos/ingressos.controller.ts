@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe 
 import { IngressosService } from './ingressos.service';
 import { CreateIngressoDto } from './dto/create-ingresso.dto';
 import { UpdateIngressoDto } from './dto/update-ingresso.dto';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('ingressos')
 @Controller('ingressos')
 export class IngressosController {
     constructor(private readonly ingressosService: IngressosService) {}
@@ -13,6 +15,7 @@ export class IngressosController {
     }
 
     @Get()
+    @ApiQuery({ name: 'sessaoId', required: false })
     findAll(@Query('sessaoId') sessaoId?: string) {
         return this.ingressosService.findAll(sessaoId);
     }

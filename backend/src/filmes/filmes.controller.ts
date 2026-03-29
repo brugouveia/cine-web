@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { FilmesService } from './filmes.service';
 import { CreateFilmeDto } from './dto/create-filme.dto';
 import { UpdateFilmeDto } from './dto/update-filme.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('filmes')
 @Controller('filmes')
 export class FilmesController {
     constructor(private readonly filmesService: FilmesService) {}

@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { SessoesService } from './sessoes.service';
 import { CreateSessaoDto } from './dto/create-sessao.dto';
 import { UpdateSessaoDto } from './dto/update-sessao.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('sessoes')
 @Controller('sessoes')
 export class SessoesController {
     constructor(private readonly sessoesService: SessoesService) {}
