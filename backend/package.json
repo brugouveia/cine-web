@@ -8,8 +8,10 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start:database": "docker compose up -d postgres",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:dev:full": "npm run start:database && prisma migrate dev && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -20,7 +22,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate",
-    "prisma:migrate:reset": "npx prisma migrate reset"
+    "prisma:migrate:reset": "npx prisma migrate reset",
+    "prisma:studio": "npx prisma studio"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
